@@ -1,4 +1,4 @@
-package com.srinredd.assignmentsubmissionapp.filter;
+package com.srinredd.assignmentsubmissionapp.jwt;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,28 +16,29 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.srinredd.assignmentsubmissionapp.service.UserDetailServiceImpl;
-import com.srinredd.assignmentsubmissionapp.util.JwtUtil;
+import com.srinredd.assignmentsubmissionapp.service.UserDetailsServiceImpl;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
 	@Autowired
-	private UserDetailServiceImpl userDetailServiceImpl;
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@Autowired
 	private JwtUtil jwtUtil;
+	
+	private String jwtToken = null;
+	private String usernameFromToken = null;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 
 		// Get authorization header and validate
-		final String requestTokenHeader = request.getHeader("Authorization");
+		final String requestTokenHeader = request.getHeader("Authorization");		
 
-		String jwtToken = null;
-		String usernameFromToken = null;
-
+		// check if the requestTokenHeader is not null and it start with Bearer
+		// if it passes the check store it in a jwtToken
 		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
 			jwtToken = requestTokenHeader.substring(7);
 		} else {
@@ -45,16 +46,18 @@ public class JwtFilter extends OncePerRequestFilter {
 			System.out.println("JWT Token does not start with Bearer");
 		}
 
+		// get username from the token using jwtUtil class
 		if (jwtToken != null) {
 			try {
 				usernameFromToken = jwtUtil.getUsernameFromToken(jwtToken);
-			} catch (IllegalArgumentException e) {
-				System.out.println("JWT Token format is invalid");
+			} catch (Exception e) {
+				System.out.println("com.srinredd.assignmentsubmissionapp.jwt.JwtFilter.class: JWT Token format is invalid");
 			}
 		}
 
+		// using the usernameFromToken get UserDetails
 		if (usernameFromToken != null) {
-			UserDetails userDetails = userDetailServiceImpl.loadUserByUsername(usernameFromToken);
+			UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(usernameFromToken);
 			
 			// if token is valid configure Spring Security to manually set authentication
 			if (jwtUtil.validateToken(jwtToken, userDetails)

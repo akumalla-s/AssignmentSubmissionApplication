@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.srinredd.assignmentsubmissionapp.dto.AuthCredentialRequest;
+import com.srinredd.assignmentsubmissionapp.jwt.JwtUtil;
 import com.srinredd.assignmentsubmissionapp.model.User;
-import com.srinredd.assignmentsubmissionapp.util.JwtUtil;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,7 +27,8 @@ public class AuthenticationController {
 
 	@Autowired
 	private JwtUtil jwtUtil;
-
+	
+	// api to check whether the application is running or not: http://localhost:8080/api/auth/test
 	@GetMapping("/test")
 	public String hello() {
 		return "Application Running..";
@@ -45,9 +46,10 @@ public class AuthenticationController {
 
 			User user = (User) authenticate.getPrincipal();
 			
-			//setting password to null so that it won't be eposed in public before 
+			//setting password to null so that it won't be exposed in public before 
 			//sending it in response body.
 			user.setPassword(null);
+			
 			return ResponseEntity.ok()
 					.header(
 							HttpHeaders.AUTHORIZATION,
