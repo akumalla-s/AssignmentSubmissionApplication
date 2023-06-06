@@ -18,11 +18,15 @@ public class JwtUtil implements Serializable {
 
 	private static final long serialVersionUID = -1632717224675515594L;
 
+	// Current validity of the token is set to 5 hours: days * hours * minutes * seconds
 	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
+	
+	//This value is set in application.properties file
 	@Value("${jwt.secret}")
 	private String secret;
 
+	// Generate Jwt Token
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
 		return doGenerateToken(claims, userDetails.getUsername());
@@ -33,6 +37,12 @@ public class JwtUtil implements Serializable {
 				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000)) // Token expiration
 																									// time
 				.signWith(SignatureAlgorithm.HS512, secret).compact();
+	}
+
+	// validate token
+	public boolean validateToken(String token, UserDetails user) {
+		final String username = getUsernameFromToken(token);
+		return (username.equals(user.getUsername()) && !isTokenExpired(token));
 	}
 
 	// for retrieveing any information from token we will need the secret key
@@ -61,12 +71,6 @@ public class JwtUtil implements Serializable {
 
 	public Boolean canTokenBeRefreshed(String token) {
 		return (isTokenExpired(token)) || ignoreTokenExpiration(token);
-	}
-
-	// validate token
-	public boolean validateToken(String token, UserDetails user) {
-		final String username = getUsernameFromToken(token);
-		return (username.equals(user.getUsername()) && !isTokenExpired(token));
 	}
 
 }
