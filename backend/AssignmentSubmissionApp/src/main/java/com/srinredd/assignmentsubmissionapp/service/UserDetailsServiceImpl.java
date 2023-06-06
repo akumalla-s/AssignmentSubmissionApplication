@@ -12,7 +12,7 @@ import com.srinredd.assignmentsubmissionapp.model.User;
 import com.srinredd.assignmentsubmissionapp.repository.UserRepository;
 
 @Service
-public class UserDetailServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository;
