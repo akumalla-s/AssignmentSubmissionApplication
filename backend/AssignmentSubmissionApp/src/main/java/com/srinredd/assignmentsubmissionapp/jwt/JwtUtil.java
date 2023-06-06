@@ -1,4 +1,4 @@
-package com.srinredd.assignmentsubmissionapp.util;
+package com.srinredd.assignmentsubmissionapp.jwt;
 
 import java.io.Serializable;
 import java.util.Date;

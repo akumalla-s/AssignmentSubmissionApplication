@@ -1,4 +1,4 @@
-package com.srinredd.assignmentsubmissionapp.filter;
+package com.srinredd.assignmentsubmissionapp.jwt;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,14 +16,13 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.srinredd.assignmentsubmissionapp.service.UserDetailServiceImpl;
-import com.srinredd.assignmentsubmissionapp.util.JwtUtil;
+import com.srinredd.assignmentsubmissionapp.service.UserDetailsServiceImpl;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
 	@Autowired
-	private UserDetailServiceImpl userDetailServiceImpl;
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@Autowired
 	private JwtUtil jwtUtil;
@@ -54,7 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		}
 
 		if (usernameFromToken != null) {
-			UserDetails userDetails = userDetailServiceImpl.loadUserByUsername(usernameFromToken);
+			UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(usernameFromToken);
 			
 			// if token is valid configure Spring Security to manually set authentication
 			if (jwtUtil.validateToken(jwtToken, userDetails)
