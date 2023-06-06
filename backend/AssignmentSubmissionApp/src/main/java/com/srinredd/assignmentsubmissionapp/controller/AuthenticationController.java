@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.srinredd.assignmentsubmissionapp.dto.AuthCredentialRequest;
+import com.srinredd.assignmentsubmissionapp.jwt.JwtUtil;
 import com.srinredd.assignmentsubmissionapp.model.User;
-import com.srinredd.assignmentsubmissionapp.util.JwtUtil;
 
 @RestController
 @RequestMapping("/api/auth")
