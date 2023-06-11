@@ -50,10 +50,13 @@ public class AuthenticationController {
 			//sending it in response body.
 			user.setPassword(null);
 			
+			//generating jwt token 
+			final String jwtToken = jwtUtil.generateToken(user);
+			//System.out.println(user.getUsername()+" Token is: "+ jwtToken);
 			return ResponseEntity.ok()
 					.header(
 							HttpHeaders.AUTHORIZATION,
-							jwtUtil.generateToken(user)
+							jwtToken
 					)
 					.body(user);
 			
