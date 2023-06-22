@@ -3,17 +3,19 @@ import { useLocalState } from "./util/useLocalStorage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import Homepage from "./Homepage";
+import Login from "./Login";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   const [jwt, setJwt] = useLocalState("", "jwt");
 
   useEffect(() => {
-    if(!jwt){
+    if (!jwt) {
       const reqBody = {
         username: "test",
         password: "test",
       };
-  
+
       fetch("api/auth/login", {
         method: "POST",
         headers: {
@@ -31,10 +33,20 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={ <Homepage/> } />
-        <Route exact path="/dashboard" element={ <Dashboard/> } />
-    </Routes>
-    </Router>   
+        <Route exact path="/" element={<Homepage />} />
+
+        <Route
+          exact path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+
+        <Route exact path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
 
