@@ -1,27 +1,52 @@
-function App() {
-  const reqBody = {
-    username: "test",
-    password: "test",
-  };
+import { useEffect } from "react";
+import { useLocalState } from "./util/useLocalStorage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./Dashboard";
+import Homepage from "./Homepage";
+import Login from "./Login";
+import PrivateRoute from "./PrivateRoute";
 
-  fetch("api/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(reqBody),
-  })
-    .then((response) => Promise.all([response.json(), response.headers]))
-    .then(([body, headers]) => {
-      const authValue = headers.get("authorization");
-      console.log(authValue);
-      console.log(body);
-    });
+function App() {
+  const [jwt, setJwt] = useLocalState("", "jwt");
+
+  useEffect(() => {
+    if (!jwt) {
+      const reqBody = {
+        username: "test",
+        password: "test",
+      };
+
+      fetch("api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reqBody),
+      })
+        .then((response) => Promise.all([response.json(), response.headers]))
+        .then(([body, headers]) => {
+          setJwt(headers.get("authorization"));
+        });
+    }
+  }, [jwt, setJwt]);
 
   return (
-    <div className="App">
-      <h1>Hello World!</h1>
-    </div>
+    <Router>
+      <Routes>
+        <Route exact path="/" element={<Homepage />} />
+
+        <Route
+          exact path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+
+        <Route exact path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
 
