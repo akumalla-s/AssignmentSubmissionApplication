@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocalState } from "../util/useLocalStorage";
+import ajax from "../Services/fetchService";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -13,24 +14,12 @@ export default function Login() {
       password: password,
     };
 
-    fetch("api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(reqBody),
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          return Promise.all([response.json(), response.headers]);
-        }else{
-          return Promise.reject("Invalid login attempt");
-        }
-      })
+    ajax("api/auth/login", "POST", null, reqBody, "loginRequest")
       .then(([body, headers]) => {
         setJwt(headers.get("authorization"));
         window.location.href = "dashboard";
-      }).catch((message)=>{
+      })
+      .catch((message) => {
         alert(message);
       });
   }

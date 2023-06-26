@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocalState } from "../util/useLocalStorage";
+import ajax from "../Services/fetchService";
 
 export default function AssignmentView() {
   const [jwt, setJwt] = useLocalState("", "jwt");
@@ -10,43 +11,28 @@ export default function AssignmentView() {
   });
 
   function updateAssignment(property, value) {
-    const newAssignment = {...assignment};
+    const newAssignment = { ...assignment };
     newAssignment[property] = value;
     setAssignment(newAssignment);
   }
 
   function save() {
-    fetch(`/api/assignments/${assignmentId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${jwt}`,
-      },
-      body: JSON.stringify(assignment),
-    })
-      .then((response) => {
-        if (response.status === 200) return response.json();
-      })
-      .then((assignmentsData) => {
+    ajax(`/api/assignments/${assignmentId}`, "PUT", jwt, assignment).then(
+      (assignmentsData) => {
         setAssignment(assignmentsData);
-      });
+      }
+    );
   }
 
   useEffect(() => {
-    fetch(`/api/assignments/${assignmentId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${jwt}`,
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) return response.json();
-      })
-      .then((assignmentsData) => {
+    ajax(`/api/assignments/${assignmentId}`, "GET", jwt).then(
+      (assignmentsData) => {
+        if (assignmentsData.branch === null) assignmentsData.branch = "";
+        if (assignmentsData.githubUrl === null) assignmentsData.githubUrl = "";
         setAssignment(assignmentsData);
-      });
-  }, [jwt]);
+      }
+    );
+  }, []);
 
   return (
     <div>
