@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocalState } from "../util/useLocalStorage";
 import ajax from "../Services/fetchService";
+import { Button, Col, Container, Row, Form } from "react-bootstrap";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -25,29 +26,46 @@ export default function Login() {
   }
   return (
     <>
-      <div>
-        <label htmlFor="username">Username: </label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password: </label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <div>
-        <button id="submit" type="button" onClick={() => sendLoginRequest()}>
+      <Container className="mt-5">
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label htmlFor="username" className="fs-4">
+            Username
+          </Form.Label>
+          <Form.Control
+            type="text"
+            id="username"
+            size="lg"
+            placeholder="Enter username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label htmlFor="password" className="fs-4">
+            Password
+          </Form.Label>
+          <Form.Control
+            type="password"
+            id="password"
+            size="lg"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </Form.Group>
+
+        <Button
+          className="mt-2"
+          variant="primary"
+          size="lg"
+          id="submit"
+          type="button"
+          onClick={() => sendLoginRequest()}
+        >
           Login
-        </button>
-      </div>
+        </Button>
+      </Container>
     </>
   );
 }
