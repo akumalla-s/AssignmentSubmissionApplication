@@ -28,12 +28,11 @@ export default function Login() {
     <>
       <Container className="mt-5">
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label htmlFor="username" className="fs-4">
+          <Form.Label className="fs-4">
             Username
           </Form.Label>
           <Form.Control
             type="text"
-            id="username"
             size="lg"
             placeholder="Enter username"
             value={username}
@@ -42,12 +41,11 @@ export default function Login() {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label htmlFor="password" className="fs-4">
+          <Form.Label className="fs-4">
             Password
           </Form.Label>
           <Form.Control
             type="password"
-            id="password"
             size="lg"
             placeholder="Password"
             value={password}
