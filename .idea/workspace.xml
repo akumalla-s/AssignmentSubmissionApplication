@@ -5,21 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ff129f9-1666-4c37-8a2f-ff34e4247c63" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.idea/backend.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/AssignmentSubmissionAppApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/AssignmentSubmissionAppApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/ServletInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/ServletInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/web/src/Login/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/src/Login/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +34,10 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -77,7 +67,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1688089920930</updated>
-      <workItem from="1688089922457" duration="1583000" />
+      <workItem from="1688089922457" duration="1947000" />
     </task>
     <servers />
   </component>
