@@ -27,44 +27,62 @@ export default function Login() {
   return (
     <>
       <Container className="mt-5">
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label htmlFor="username" className="fs-4">
-            Username
-          </Form.Label>
-          <Form.Control
-            type="text"
-            id="username"
-            size="lg"
-            placeholder="Enter username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </Form.Group>
+        <Row className="justify-content-center">
+          <Col md="8" lg="6">
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label className="fs-4">Username</Form.Label>
+              <Form.Control
+                type="text"
+                size="lg"
+                placeholder="Enter username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label htmlFor="password" className="fs-4">
-            Password
-          </Form.Label>
-          <Form.Control
-            type="password"
-            id="password"
-            size="lg"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
+        <Row className="justify-content-center">
+          <Col md="8" lg="6">
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label className="fs-4">Password</Form.Label>
+              <Form.Control
+                type="password"
+                size="lg"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
 
-        <Button
-          className="mt-2"
-          variant="primary"
-          size="lg"
-          id="submit"
-          type="button"
-          onClick={() => sendLoginRequest()}
-        >
-          Login
-        </Button>
+        <Row className="justify-content-center">
+          <Col
+            md="8"
+            lg="6"
+            className="mt-2 d-flex flex-column gap-5 flex-md-row justify-content-md-between"
+          >
+            <Button
+              variant="primary"
+              size="lg"
+              id="submit"
+              type="button"
+              onClick={() => sendLoginRequest()}
+            >
+              Login
+            </Button>
+            <Button
+              variant="secondary"
+              size="lg"
+              id="submit"
+              type="button"
+              onClick={() => (window.location.href = "/")}
+            >
+              Exit
+            </Button>
+          </Col>
+        </Row>
       </Container>
     </>
   );
