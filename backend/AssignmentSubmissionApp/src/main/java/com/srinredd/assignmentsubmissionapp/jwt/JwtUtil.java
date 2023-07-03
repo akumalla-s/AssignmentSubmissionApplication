@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.util.StringUtils;
 
 @Component
 public class JwtUtil implements Serializable {
@@ -21,7 +22,6 @@ public class JwtUtil implements Serializable {
 	// Current validity of the token is set to 5 hours: days * hours * minutes * seconds
 	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
-	
 	//This value is set in application.properties file
 	@Value("${jwt.secret}")
 	private String secret;
@@ -41,8 +41,16 @@ public class JwtUtil implements Serializable {
 
 	// validate token
 	public boolean validateToken(String token, UserDetails user) {
+//		if(!StringUtils.hasText(token)){
+//			return false;
+//		}
 		final String username = getUsernameFromToken(token);
-		return (username.equals(user.getUsername()) && !isTokenExpired(token));
+		System.out.println("The token is "+token);
+		System.out.println("Username "+ username);
+		if(user!=null){
+			System.out.println(user.getUsername());
+		}
+		return (user != null && username.equals(user.getUsername()) && !isTokenExpired(token));
 	}
 
 	// for retrieveing any information from token we will need the secret key
