@@ -1,5 +1,6 @@
 package com.srinredd.assignmentsubmissionapp.controller;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -8,11 +9,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import com.srinredd.assignmentsubmissionapp.dto.AuthCredentialRequest;
 import com.srinredd.assignmentsubmissionapp.jwt.JwtUtil;
@@ -63,5 +61,18 @@ public class AuthenticationController {
 		} catch (BadCredentialsException ex) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-	}	
+	}
+
+	@GetMapping("/validate")
+	public ResponseEntity<?> validateToken(@RequestParam String token,
+										   @AuthenticationPrincipal User user) {
+		try {
+			Boolean isValidToken = jwtUtil.validateToken(token, user);
+			System.out.println("checking token:  "+isValidToken);
+			return ResponseEntity.ok(isValidToken);
+		} catch (ExpiredJwtException e) {
+			return ResponseEntity.ok(false);
+		}
+	}
+
 }
