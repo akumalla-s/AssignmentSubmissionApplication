@@ -74,7 +74,8 @@ public class SecurityConfiguration {
 		//set permissions on end points
 		http.authorizeHttpRequests()
 			//Our public end points
-			.antMatchers("/api/auth/**").permitAll();
+			.antMatchers("/api/auth/**").permitAll()
+			.antMatchers("/api").permitAll();
 		
 		//Our private end points
 		http.authorizeHttpRequests().anyRequest().authenticated();
