@@ -6,6 +6,7 @@ import { Button, Col, Container, Row, Form } from "react-bootstrap";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const [jwt, setJwt] = useLocalState("", "jwt");
 
@@ -15,14 +16,26 @@ export default function Login() {
       password: password,
     };
 
-    ajax("api/auth/login", "POST", null, reqBody, "loginRequest")
-      .then(([body, headers]) => {
-        setJwt(headers.get("authorization"));
-        window.location.href = "dashboard";
-      })
-      .catch((message) => {
-        alert(message);
-      });
+    fetch("/api/auth/login",{
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "post",
+      body: JSON.stringify(reqBody),
+    })
+    .then((response) => {
+      if(response.status === 200){
+        return Promise.all([response.json(), response.headers]);
+      }else{
+        return Promise.reject("Invalid login attempt");
+      }
+    })
+    .then(([body, headers]) => {
+      setJwt(headers.get("authorization"));
+      window.location.href = "dashboard";
+    }).catch((message) => {
+      alert(message);
+    })
   }
   return (
     <>
