@@ -1,4 +1,4 @@
-export default function ajax(url, requestMethod, jwt, requestBody, fetchReq) {
+export default function ajax(url, requestMethod, jwt, requestBody) {
   const fetchData = {
     headers: {
       "Content-Type": "application/json",
@@ -14,13 +14,13 @@ export default function ajax(url, requestMethod, jwt, requestBody, fetchReq) {
     fetchData.body = JSON.stringify(requestBody);
   }
   return fetch(url, fetchData).then((response) => {
-    if(fetchReq === "loginRequest"){
-      if (response.status === 200) {
-          return Promise.all([response.json(), response.headers]);
-        }else{
-          return Promise.reject("Invalid login attempt");
-        }
+    if (response.status === 200) {
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        return response.json();
+      } else {
+        return response.text();
+      }
     }
-    if (response.status === 200) return response.json();
   });
 }
