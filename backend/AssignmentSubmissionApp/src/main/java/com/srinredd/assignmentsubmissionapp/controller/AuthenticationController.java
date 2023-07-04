@@ -68,7 +68,6 @@ public class AuthenticationController {
 										   @AuthenticationPrincipal User user) {
 		try {
 			Boolean isValidToken = jwtUtil.validateToken(token, user);
-			System.out.println("checking token:  "+isValidToken);
 			return ResponseEntity.ok(isValidToken);
 		} catch (ExpiredJwtException e) {
 			return ResponseEntity.ok(false);

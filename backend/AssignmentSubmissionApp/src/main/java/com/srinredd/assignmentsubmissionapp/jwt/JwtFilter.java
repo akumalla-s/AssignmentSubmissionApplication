@@ -8,7 +8,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,7 +54,10 @@ public class JwtFilter extends OncePerRequestFilter {
 		if (jwtToken != null) {
 			try {
 				usernameFromToken = jwtUtil.getUsernameFromToken(jwtToken);
-			} catch (Exception e) {
+			}  catch (ExpiredJwtException | SignatureException e) {
+				chain.doFilter(request, response);
+				return;
+			}catch (Exception e) {
 				System.out.println("com.srinredd.assignmentsubmissionapp.jwt.JwtFilter.class: JWT Token format is invalid");
 			}
 		}
