@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -41,9 +42,6 @@ public class JwtUtil implements Serializable {
 
 	// validate token
 	public boolean validateToken(String token, UserDetails user) {
-//		if(!StringUtils.hasText(token)){
-//			return false;
-//		}
 		final String username = getUsernameFromToken(token);
 		return (user != null && username.equals(user.getUsername()) && !isTokenExpired(token));
 	}
@@ -64,7 +62,7 @@ public class JwtUtil implements Serializable {
 	}
 
 	public boolean isTokenExpired(String token) {
-		Date expiration = getExpirationDateFromToken(token);
+		final Date expiration = getExpirationDateFromToken(token);
 		return expiration.before(new Date());
 	}
 
