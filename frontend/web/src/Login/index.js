@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { useLocalState } from "../util/useLocalStorage";
-import ajax from "../Services/fetchService";
 import { Button, Col, Container, Row, Form } from "react-bootstrap";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState(null);
 
   const [jwt, setJwt] = useLocalState("", "jwt");
 
