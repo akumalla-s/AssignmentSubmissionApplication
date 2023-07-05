@@ -3,6 +3,7 @@ package com.srinredd.assignmentsubmissionapp.controller;
 import java.util.Optional;
 import java.util.Set;
 
+import com.srinredd.assignmentsubmissionapp.dto.AssignmentResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,8 +41,9 @@ public class AssignmentController {
 
 	@GetMapping("{assignmentId}")
 	public ResponseEntity<?> getAssignmentById(@PathVariable Long assignmentId, @AuthenticationPrincipal User user) {
-		Optional<Assignment> assignment = assignmentService.findById(assignmentId);
-		return ResponseEntity.ok(assignment.orElse(new Assignment()));
+		Optional<Assignment> assignmentOpt = assignmentService.findById(assignmentId);
+		AssignmentResponseDto  response = new AssignmentResponseDto(assignmentOpt.orElse(new Assignment()));
+		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping("{assignmentId}")

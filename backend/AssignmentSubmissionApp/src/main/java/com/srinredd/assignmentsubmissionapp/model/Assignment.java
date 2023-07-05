@@ -12,7 +12,7 @@ public class Assignment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
+    private Integer number;
     private String status;
     private String githubUrl;
     private String branch;
@@ -70,11 +70,11 @@ public class Assignment {
         this.codeReviewUrl = codeReviewUrl;
     }
 
-    public String getName() {
-        return name;
+    public Integer getNumber() {
+        return number;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 }

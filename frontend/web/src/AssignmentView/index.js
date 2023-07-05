@@ -10,6 +10,7 @@ export default function AssignmentView() {
     branch: "",
     githubUrl: "",
   });
+  const [assignmentEnums,setAssignmentEnums] = useState([]);
 
   function updateAssignment(property, value) {
     const newAssignment = { ...assignment };
@@ -27,10 +28,12 @@ export default function AssignmentView() {
 
   useEffect(() => {
     ajax(`/api/assignments/${assignmentId}`, "GET", jwt).then(
-      (assignmentsData) => {
+      (assignmentsResponse) => {
+        let assignmentsData = assignmentsResponse.assignment;
         if (assignmentsData.branch === null) assignmentsData.branch = "";
         if (assignmentsData.githubUrl === null) assignmentsData.githubUrl = "";
         setAssignment(assignmentsData);
+        setAssignmentEnums(assignmentsResponse.assignmentEnums);
       }
     );
   }, []);
@@ -59,9 +62,9 @@ export default function AssignmentView() {
                 as={ButtonGroup}
                 id="assignmentName"
                 variant={"info"}
-                title="Assignment 1"
+                title="Assignments"
               >
-                {[1,2,3,4,5,6].map(assignmentNum => <Dropdown.Item eventKey={assignmentNum}>{assignmentNum}</Dropdown.Item>)}
+                {assignmentEnums.map(assignmentEnum => <Dropdown.Item eventKey={assignmentEnum.assignmentNum}>{assignmentEnum.assignmentNum}, {assignmentEnum.assignmentName}</Dropdown.Item>)}
               </DropdownButton>
             </Col>
           </Form.Group>
