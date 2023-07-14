@@ -3,6 +3,7 @@ package com.srinredd.assignmentsubmissionapp.service;
 import java.util.Optional;
 import java.util.Set;
 
+import com.srinredd.assignmentsubmissionapp.enums.AssignmentStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class AssignmentService {
 
 	public Assignment save(User user) {
 		Assignment assignment = new Assignment();
-		assignment.setStatus("Needs to be submitted");
+		assignment.setStatus(AssignmentStatusEnum.PENDING_SUBMISSION.getStatus());
 		assignment.setUser(user);
 
 		return assignmentRepository.save(assignment);
