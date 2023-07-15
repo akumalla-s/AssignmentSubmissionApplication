@@ -48,14 +48,20 @@ export default function AssignmentView() {
     // This implies that the student is submitting the assignment for the first time
     let updatedAssignment = { ...assignment };
     if (assignment.status === assignmentStatuses[0].status) {
-      updatedAssignment = {...assignment, status:assignmentStatuses[1].status}
+      updatedAssignment = {
+        ...assignment,
+        status: assignmentStatuses[1].status,
+      };
     }
-    
-    ajax(`/api/assignments/${assignmentId}`, "PUT", jwt, updatedAssignment).then(
-      (assignmentsData) => {
-        setAssignment(assignmentsData);
-      }
-    );
+
+    ajax(
+      `/api/assignments/${assignmentId}`,
+      "PUT",
+      jwt,
+      updatedAssignment
+    ).then((assignmentsData) => {
+      setAssignment(assignmentsData);
+    });
   }
 
   return (
@@ -91,7 +97,10 @@ export default function AssignmentView() {
                 }}
               >
                 {assignmentEnums.map((assignmentEnum) => (
-                  <Dropdown.Item eventKey={assignmentEnum.assignmentNum}>
+                  <Dropdown.Item
+                    key={assignmentEnum.assignmentNum}
+                    eventKey={assignmentEnum.assignmentNum}
+                  >
                     {assignmentEnum.assignmentNum},{" "}
                     {assignmentEnum.assignmentName}
                   </Dropdown.Item>
@@ -126,9 +135,20 @@ export default function AssignmentView() {
               />
             </Col>
           </Form.Group>
-          <Button size="lg" onClick={() => save()}>
-            Submit Assignment
-          </Button>
+          <div className="d-flex gap-5">
+            <Button size="lg" onClick={() => save()}>
+              Submit Assignment
+            </Button>
+            <Button
+              size="lg"
+              variant="secondary"
+              onClick={() => {
+                window.location.href = "/dashboard";
+              }}
+            >
+              Back
+            </Button>
+          </div>
         </>
       ) : (
         <></>
