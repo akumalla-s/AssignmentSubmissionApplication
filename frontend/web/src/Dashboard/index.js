@@ -23,6 +23,19 @@ export default function Dashboard() {
 
   return (
     <div style={{ margin: "2em" }}>
+      <Row>
+        <Col>
+        <div 
+          className="d-flex justify-content-end"
+          style={{cursor: "pointer"}}
+          onClick={()=>{
+          setJwt(null);
+          window.location.href = "/login"
+        }}>
+          Logout
+        </div>          
+        </Col>
+      </Row>
       <div className="mb-5">
         <Button size="lg" onClick={() => createAssignment()}>
           Submit New Assignment
