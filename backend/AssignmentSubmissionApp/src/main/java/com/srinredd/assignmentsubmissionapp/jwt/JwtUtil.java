@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,13 +31,19 @@ public class JwtUtil implements Serializable {
 	// Generate Jwt Token
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
+		claims.put("authorities", userDetails.getAuthorities()
+				.stream()
+				.map(auth -> auth.getAuthority())
+				.collect(Collectors.toList()));
 		return doGenerateToken(claims, userDetails.getUsername());
 	}
 
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
-		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000)) // Token expiration
-																									// time
+		return Jwts.builder()
+				.setClaims(claims)
+				.setSubject(subject)
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000)) // Token expiration time
 				.signWith(SignatureAlgorithm.HS512, secret).compact();
 	}
 

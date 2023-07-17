@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useLocalState } from "../util/useLocalStorage";
 import { Link, Navigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
-import { Badge, Button, Card, Col, Row } from "react-bootstrap";
+import { Badge, Button, Card, Col, Container, Row } from "react-bootstrap";
 
-export default function Dashboard() {
+export default function CodeReviewerDashboard() {
   const [jwt, setJwt] = useLocalState("", "jwt");
   const [assignments, setAssignments] = useState(null);
 
@@ -22,7 +22,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div style={{ margin: "2em" }}>
+    <Container>
       <Row>
         <Col>
         <div 
@@ -36,10 +36,12 @@ export default function Dashboard() {
         </div>          
         </Col>
       </Row>
+      <Row>
+        <Col>
+          <div className="h1">Code Reviewer Dashboard</div>
+        </Col>
+      </Row>
       <div className="mb-5">
-        <Button size="lg" onClick={() => createAssignment()}>
-          Submit New Assignment
-        </Button>
       </div>
       {assignments ? (
         <div
@@ -79,6 +81,6 @@ export default function Dashboard() {
       ) : (
         <></>
       )}
-    </div>
+    </Container>
   );
 }
