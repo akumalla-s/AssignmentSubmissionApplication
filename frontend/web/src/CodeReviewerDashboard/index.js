@@ -4,10 +4,32 @@ import { useLocalState } from "../util/useLocalStorage";
 import { Link, Navigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import { Badge, Button, Card, Col, Container, Row } from "react-bootstrap";
+import jwt_decode from "jwt-decode";
 
 export default function CodeReviewerDashboard() {
   const [jwt, setJwt] = useLocalState("", "jwt");
   const [assignments, setAssignments] = useState(null);
+
+  function claimAssignment(assignment) {
+    const decodedJWT = jwt_decode(jwt);
+    const user = {
+      username: decodedJWT.sub,
+      authorities: decodedJWT.authorities,
+    };
+
+    assignment.codeReviewer = user;
+    assignment.status = "In Review";
+
+    ajax(`api/assignments/${assignment.id}`, "PUT", jwt, assignment).then(
+      (updatedAssignment) => {
+        //TODO: update the view for the assignment that changed
+        const assignmentsCopy = [...assignments];
+        const i = assignmentsCopy.findIndex(a => a.id === assignment.id);
+        assignmentsCopy[i]  = updatedAssignment;
+        setAssignments(assignmentsCopy);
+      }
+    );
+  }
 
   // fetch assignments from database
   useEffect(() => {
@@ -40,17 +62,18 @@ export default function CodeReviewerDashboard() {
       {/*<div className="assignment-wrapper in-review"></div>*/}
 
       <div className="assignment-wrapper submitted">
-        <div 
+        <div
           className="h3 px-2"
           style={{
             width: "min-content",
             marginTop: "-2em",
             marginBottom: "1em",
             backgroundColor: "white",
-            whiteSpace: "nowrap"
+            whiteSpace: "nowrap",
           }}
         >
-          Awaiting Review</div>
+          Awaiting Review
+        </div>
         <div className="mb-5"></div>
         {assignments ? (
           <div
@@ -78,10 +101,10 @@ export default function CodeReviewerDashboard() {
                   <Button
                     variant="secondary"
                     onClick={() => {
-                      window.location.href = `/assignments/${assignment.id}`;
+                      claimAssignment(assignment);
                     }}
                   >
-                    Edit
+                    Claim
                   </Button>
                 </Card.Body>
               </Card>
