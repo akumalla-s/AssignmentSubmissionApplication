@@ -16,11 +16,13 @@ public class Assignment {
     private String status;
     private String githubUrl;
     private String branch;
-    private String codeReviewUrl;
+    private String codeReviewVideoUrl;
 
     @ManyToOne(optional = false)
     private User user;
-//	private User assignedTo;
+
+    @ManyToOne
+	private User codeReviewer;
 
     public User getUser() {
         return user;
@@ -62,12 +64,12 @@ public class Assignment {
         this.branch = branch;
     }
 
-    public String getCodeReviewUrl() {
-        return codeReviewUrl;
+    public String getCodeReviewVideoUrl() {
+        return codeReviewVideoUrl;
     }
 
-    public void setCodeReviewUrl(String codeReviewUrl) {
-        this.codeReviewUrl = codeReviewUrl;
+    public void setCodeReviewVideoUrl(String codeReviewVideoUrl) {
+        this.codeReviewVideoUrl = codeReviewVideoUrl;
     }
 
     public Integer getNumber() {
@@ -76,5 +78,13 @@ public class Assignment {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public User getCodeReviewer() {
+        return codeReviewer;
+    }
+
+    public void setCodeReviewer(User codeReviewer) {
+        this.codeReviewer = codeReviewer;
     }
 }
