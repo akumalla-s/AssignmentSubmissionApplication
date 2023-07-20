@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.srinredd.assignmentsubmissionapp.enums.AssignmentStatusEnum;
+import com.srinredd.assignmentsubmissionapp.enums.AuthorityEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +48,18 @@ public class AssignmentService {
 	}
 
 	public Set<Assignment> findByUser(User user) {
-		return assignmentRepository.findByUser(user);
+		//load assignments if you're a code reviewer role
+		boolean hasCodeReviewerRole = user.getAuthorities()
+			.stream()
+			.filter(auth -> AuthorityEnum.ROLE_CODE_REVIEWER.name().equals(auth.getAuthority()))
+			.count() > 0;
+
+		if(hasCodeReviewerRole){
+			return assignmentRepository.findByCodeReviewer(user);
+		}else{
+			// load assignments if you're a student role
+			return assignmentRepository.findByUser(user);
+		}
 	}
 
 	public Optional<Assignment> findById(Long assignmentId) {
