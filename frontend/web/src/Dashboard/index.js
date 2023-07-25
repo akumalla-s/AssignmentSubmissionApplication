@@ -25,15 +25,16 @@ export default function Dashboard() {
     <div style={{ margin: "2em" }}>
       <Row>
         <Col>
-        <div 
-          className="d-flex justify-content-end"
-          style={{cursor: "pointer"}}
-          onClick={()=>{
-          setJwt(null);
-          window.location.href = "/login"
-        }}>
-          Logout
-        </div>          
+          <div
+            className="d-flex justify-content-end"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setJwt(null);
+              window.location.href = "/login";
+            }}
+          >
+            Logout
+          </div>
         </Col>
       </Row>
       <div className="mb-5">
@@ -54,7 +55,11 @@ export default function Dashboard() {
               <Card.Body className="d-flex flex-column justify-content-around">
                 <Card.Title>Assignment #{assignment.number}</Card.Title>
                 <div className="d-flex align-items-start">
-                  <Badge pill bg="info" style={{ fontSize: "1em" }}>
+                  <Badge
+                    pill
+                    bg={assignment.status === "Completed" ? "success" : "info"}
+                    style={{ fontSize: "1em" }}
+                  >
                     {assignment.status}
                   </Badge>
                 </div>
