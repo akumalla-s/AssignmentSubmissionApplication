@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocalState } from "../util/useLocalStorage";
 import ajax from "../Services/fetchService";
 import {
@@ -24,6 +24,17 @@ export default function AssignmentView() {
   });
   const [assignmentEnums, setAssignmentEnums] = useState([]);
   const [assignmentStatuses, setAssignmentStatuses] = useState([]);
+  const prevAssignmentValue = useRef(assignment);
+
+  useEffect(() => {
+    if (
+      assignment &&
+      prevAssignmentValue.current.status !== assignment.status
+    ) {
+      persist();
+    }
+    prevAssignmentValue.current = assignment;
+  }, [assignment]);
 
   useEffect(() => {
     ajax(`/api/assignments/${assignmentId}`, "GET", jwt).then(
@@ -46,22 +57,19 @@ export default function AssignmentView() {
 
   function save() {
     // This implies that the student is submitting the assignment for the first time
-    let updatedAssignment = { ...assignment };
     if (assignment.status === assignmentStatuses[0].status) {
-      updatedAssignment = {
-        ...assignment,
-        status: assignmentStatuses[1].status,
-      };
+      updateAssignment("status", assignmentStatuses[1].status);
+    } else {
+      persist();
     }
+  }
 
-    ajax(
-      `/api/assignments/${assignmentId}`,
-      "PUT",
-      jwt,
-      updatedAssignment
-    ).then((assignmentsData) => {
-      setAssignment(assignmentsData);
-    });
+  function persist() {
+    ajax(`/api/assignments/${assignmentId}`, "PUT", jwt, assignment).then(
+      (assignmentsData) => {
+        setAssignment(assignmentsData);
+      }
+    );
   }
 
   return (
@@ -135,20 +143,55 @@ export default function AssignmentView() {
               />
             </Col>
           </Form.Group>
-          <div className="d-flex gap-5">
-            <Button size="lg" onClick={() => save()}>
-              Submit Assignment
-            </Button>
-            <Button
-              size="lg"
-              variant="secondary"
-              onClick={() => {
-                window.location.href = "/dashboard";
-              }}
-            >
-              Back
-            </Button>
-          </div>
+
+          {assignment.status === "Completed" ? (
+            <>
+              <Form.Group
+                as={Row}
+                className="d-flex align-items-center mb-3"
+                controlId="branch"
+              >
+                <Form.Label column sm="3" md="2">
+                  Code Review Vidoe URL:
+                </Form.Label>
+                <Col sm="9" md="8" lg="6">
+                  <a
+                    href={assignment.codeReviewVideoUrl}
+                    style={{ fontWeight: "bold" }}
+                  >
+                    {assignment.codeReviewVideoUrl}
+                  </a>
+                </Col>
+              </Form.Group>
+
+              <div className="d-flex gap-5">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  onClick={() => {
+                    window.location.href = "/dashboard";
+                  }}
+                >
+                  Back
+                </Button>
+              </div>
+            </>
+          ) : (
+            <div className="d-flex gap-5">
+              <Button size="lg" onClick={() => save()}>
+                Submit Assignment
+              </Button>
+              <Button
+                size="lg"
+                variant="secondary"
+                onClick={() => {
+                  window.location.href = "/dashboard";
+                }}
+              >
+                Back
+              </Button>
+            </div>
+          )}
         </>
       ) : (
         <></>
