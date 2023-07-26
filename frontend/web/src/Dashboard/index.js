@@ -3,8 +3,11 @@ import { useLocalState } from "../util/useLocalStorage";
 import { Link, Navigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import { Badge, Button, Card, Col, Row } from "react-bootstrap";
+import StatusBadge from "../StatusBadge";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  let navigate = useNavigate();
   const [jwt, setJwt] = useLocalState("", "jwt");
   const [assignments, setAssignments] = useState(null);
 
@@ -17,7 +20,7 @@ export default function Dashboard() {
 
   function createAssignment() {
     ajax("api/assignments", "POST", jwt).then((assignment) => {
-      window.location.href = `/assignments/${assignment.id}`;
+      navigate(`/assignments/${assignment.id}`);
     });
   }
 
@@ -30,7 +33,7 @@ export default function Dashboard() {
             style={{ cursor: "pointer" }}
             onClick={() => {
               setJwt(null);
-              window.location.href = "/login";
+              navigate("/login");
             }}
           >
             Logout
@@ -55,13 +58,7 @@ export default function Dashboard() {
               <Card.Body className="d-flex flex-column justify-content-around">
                 <Card.Title>Assignment #{assignment.number}</Card.Title>
                 <div className="d-flex align-items-start">
-                  <Badge
-                    pill
-                    bg={assignment.status === "Completed" ? "success" : "info"}
-                    style={{ fontSize: "1em" }}
-                  >
-                    {assignment.status}
-                  </Badge>
+                  <StatusBadge text={assignment.status} />
                 </div>
                 <Card.Text style={{ marginTop: "1em" }}>
                   <p>GitHub URL: {assignment.githubUrl}</p>
@@ -72,7 +69,7 @@ export default function Dashboard() {
                 <Button
                   variant="secondary"
                   onClick={() => {
-                    window.location.href = `/assignments/${assignment.id}`;
+                    navigate(`/assignments/${assignment.id}`);
                   }}
                 >
                   Edit

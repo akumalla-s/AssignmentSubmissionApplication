@@ -5,13 +5,16 @@ import { Link, Navigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import { Badge, Button, Card, Col, Container, Row } from "react-bootstrap";
 import jwt_decode from "jwt-decode";
+import StatusBadge from "../StatusBadge";
+import { useNavigate } from "react-router-dom";
 
 export default function CodeReviewerDashboard() {
+  let navigate = useNavigate();
   const [jwt, setJwt] = useLocalState("", "jwt");
   const [assignments, setAssignments] = useState(null);
 
-  function editReview (assignment) {
-    window.location.href = `/assignments/${assignment.id}`;
+  function editReview(assignment) {
+    navigate(`/assignments/${assignment.id}`);
   }
 
   function claimAssignment(assignment) {
@@ -51,7 +54,7 @@ export default function CodeReviewerDashboard() {
             style={{ cursor: "pointer" }}
             onClick={() => {
               setJwt(null);
-              window.location.href = "/login";
+              navigate("/login");
             }}
           >
             Logout
@@ -74,7 +77,7 @@ export default function CodeReviewerDashboard() {
             style={{ gridTemplateColumns: "repeat(auto-fill, 18rem)" }}
           >
             {assignments
-              .filter((assignments) => assignments.status === "In Review")
+              .filter((assignment) => assignment.status === "In Review")
               .map((assignment) => (
                 <Card
                   key={assignment.id}
@@ -83,9 +86,7 @@ export default function CodeReviewerDashboard() {
                   <Card.Body className="d-flex flex-column justify-content-around">
                     <Card.Title>Assignment #{assignment.number}</Card.Title>
                     <div className="d-flex align-items-start">
-                      <Badge pill bg="info" style={{ fontSize: "1em" }}>
-                        {assignment.status}
-                      </Badge>
+                      <StatusBadge text={assignment.status} />
                     </div>
                     <Card.Text style={{ marginTop: "1em" }}>
                       <p>GitHub URL: {assignment.githubUrl}</p>
@@ -114,14 +115,25 @@ export default function CodeReviewerDashboard() {
         <div className="assignment-wrapper-title h3 px-2">Awaiting Review</div>
         <div className="mb-5"></div>
         {assignments &&
-        assignments.filter((assignment) => assignment.status === "Submitted")
-          .length > 0 ? (
+        assignments.filter(
+          (assignment) =>
+            assignment.status === "Submitted" ||
+            assignment.status === "Resubmitted"
+        ).length > 0 ? (
           <div
             className="d-grid gap-5"
             style={{ gridTemplateColumns: "repeat(auto-fill, 18rem)" }}
           >
             {assignments
-              .filter((assignments) => assignments.status === "Submitted")
+              .filter(
+                (assignment) =>
+                  assignment.status === "Submitted" ||
+                  assignment.status === "Resubmitted"
+              )
+              .sort((a,b) => {
+                if(a.status === "Resubmitted") return -1;
+                else return 1;
+              })
               .map((assignment) => (
                 <Card
                   key={assignment.id}
@@ -130,9 +142,7 @@ export default function CodeReviewerDashboard() {
                   <Card.Body className="d-flex flex-column justify-content-around">
                     <Card.Title>Assignment #{assignment.number}</Card.Title>
                     <div className="d-flex align-items-start">
-                      <Badge pill bg="info" style={{ fontSize: "1em" }}>
-                        {assignment.status}
-                      </Badge>
+                      <StatusBadge text={assignment.status} />
                     </div>
                     <Card.Text style={{ marginTop: "1em" }}>
                       <p>GitHub URL: {assignment.githubUrl}</p>
@@ -168,7 +178,7 @@ export default function CodeReviewerDashboard() {
             style={{ gridTemplateColumns: "repeat(auto-fill, 18rem)" }}
           >
             {assignments
-              .filter((assignments) => assignments.status === "Needs Update")
+              .filter((assignment) => assignment.status === "Needs Update")
               .map((assignment) => (
                 <Card
                   key={assignment.id}
@@ -177,9 +187,7 @@ export default function CodeReviewerDashboard() {
                   <Card.Body className="d-flex flex-column justify-content-around">
                     <Card.Title>Assignment #{assignment.number}</Card.Title>
                     <div className="d-flex align-items-start">
-                      <Badge pill bg="info" style={{ fontSize: "1em" }}>
-                        {assignment.status}
-                      </Badge>
+                      <StatusBadge text={assignment.status} />
                     </div>
                     <Card.Text style={{ marginTop: "1em" }}>
                       <p>GitHub URL: {assignment.githubUrl}</p>
@@ -190,7 +198,7 @@ export default function CodeReviewerDashboard() {
                     <Button
                       variant="secondary"
                       onClick={() => {
-                        window.location.href = `/assignments/${assignment.id}`;
+                        navigate(`/assignments/${assignment.id}`);
                       }}
                     >
                       View

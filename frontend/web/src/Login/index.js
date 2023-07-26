@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useLocalState } from "../util/useLocalStorage";
 import { Button, Col, Container, Row, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  let navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -30,7 +32,7 @@ export default function Login() {
     })
     .then(([body, headers]) => {
       setJwt(headers.get("authorization"));
-      window.location.href = "dashboard";
+      navigate("/dashboard", {replace: true});
     }).catch((message) => {
       alert(message);
     })
@@ -88,7 +90,7 @@ export default function Login() {
               size="lg"
               id="submit"
               type="button"
-              onClick={() => (window.location.href = "/")}
+              onClick={() => (navigate("/"))}
             >
               Exit
             </Button>
