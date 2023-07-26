@@ -12,8 +12,11 @@ import {
   ButtonGroup,
   Dropdown,
 } from "react-bootstrap";
+import StatusBadge from "../StatusBadge";
+import { useNavigate } from "react-router-dom";
 
 export default function CodeReviewerAssignmentView() {
+  let navigate = useNavigate();
   const [jwt, setJwt] = useLocalState("", "jwt");
   const assignmentId = window.location.href.split("/assignments/")[1];
   const [assignment, setAssignment] = useState({
@@ -78,9 +81,7 @@ export default function CodeReviewerAssignmentView() {
           {assignment.number ? <h1>Assignment {assignment.number}</h1> : <></>}
         </Col>
         <Col>
-          <Badge pill bg="info" style={{ fontSize: "1em" }}>
-            {assignment.status}
-          </Badge>
+        <StatusBadge text={assignment.status} />
         </Col>
       </Row>
 
@@ -172,7 +173,7 @@ export default function CodeReviewerAssignmentView() {
               size="lg"
               variant="secondary"
               onClick={() => {
-                window.location.href = "/dashboard";
+                navigate("/dashboard");
               }}
             >
               Back
