@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
-import { useLocalState } from "../util/useLocalStorage";
-import { Link, Navigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
-import { Badge, Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import jwt_decode from "jwt-decode";
 import StatusBadge from "../StatusBadge";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../UserProvider";
 
 export default function CodeReviewerDashboard() {
   let navigate = useNavigate();
-  const [jwt, setJwt] = useLocalState("", "jwt");
+  const user = useUser();
   const [assignments, setAssignments] = useState(null);
 
   function editReview(assignment) {
@@ -18,16 +17,16 @@ export default function CodeReviewerDashboard() {
   }
 
   function claimAssignment(assignment) {
-    const decodedJWT = jwt_decode(jwt);
-    const user = {
+    const decodedJWT = jwt_decode(user.jwt);
+    const codeReviewer = {
       username: decodedJWT.sub,
       authorities: decodedJWT.authorities,
     };
 
-    assignment.codeReviewer = user;
+    assignment.codeReviewer = codeReviewer;
     assignment.status = "In Review";
 
-    ajax(`api/assignments/${assignment.id}`, "PUT", jwt, assignment).then(
+    ajax(`api/assignments/${assignment.id}`, "PUT", user.jwt, assignment).then(
       (updatedAssignment) => {
         //TODO: update the view for the assignment that changed
         const assignmentsCopy = [...assignments];
@@ -40,10 +39,10 @@ export default function CodeReviewerDashboard() {
 
   // fetch assignments from database
   useEffect(() => {
-    ajax("api/assignments", "GET", jwt).then((assignmentsData) => {
+    ajax("api/assignments", "GET", user.jwt).then((assignmentsData) => {
       setAssignments(assignmentsData);
     });
-  }, [jwt]);
+  }, [user.jwt]);
 
   return (
     <Container>
@@ -53,7 +52,7 @@ export default function CodeReviewerDashboard() {
             className="d-flex justify-content-end"
             style={{ cursor: "pointer" }}
             onClick={() => {
-              setJwt(null);
+              user.setJwt(null);
               navigate("/login");
             }}
           >

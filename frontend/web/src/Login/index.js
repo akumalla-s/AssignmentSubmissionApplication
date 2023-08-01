@@ -1,14 +1,17 @@
-import { useState } from "react";
-import { useLocalState } from "../util/useLocalStorage";
+import { useEffect, useState } from "react";
 import { Button, Col, Container, Row, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../UserProvider";
 
 export default function Login() {
+  const user = useUser();
   let navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const [jwt, setJwt] = useLocalState("", "jwt");
+  useEffect(() => {
+    if (user.jwt) navigate("/dashboard");
+  },[user.jwt, navigate]);
 
   function sendLoginRequest() {
     const reqBody = {
@@ -16,26 +19,26 @@ export default function Login() {
       password: password,
     };
 
-    fetch("/api/auth/login",{
+    fetch("/api/auth/login", {
       headers: {
         "Content-Type": "application/json",
       },
       method: "post",
       body: JSON.stringify(reqBody),
     })
-    .then((response) => {
-      if(response.status === 200){
-        return Promise.all([response.json(), response.headers]);
-      }else{
-        return Promise.reject("Invalid login attempt");
-      }
-    })
-    .then(([body, headers]) => {
-      setJwt(headers.get("authorization"));
-      navigate("/dashboard", {replace: true});
-    }).catch((message) => {
-      alert(message);
-    })
+      .then((response) => {
+        if (response.status === 200) {
+          return Promise.all([response.json(), response.headers]);
+        } else {
+          return Promise.reject("Invalid login attempt");
+        }
+      })
+      .then(([body, headers]) => {
+        user.setJwt(headers.get("authorization"));
+      })
+      .catch((message) => {
+        alert(message);
+      });
   }
   return (
     <>
@@ -90,7 +93,7 @@ export default function Login() {
               size="lg"
               id="submit"
               type="button"
-              onClick={() => (navigate("/"))}
+              onClick={() => navigate("/")}
             >
               Exit
             </Button>
