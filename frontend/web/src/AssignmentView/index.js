@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocalState } from "../util/useLocalStorage";
 import ajax from "../Services/fetchService";
 import {
   Form,
@@ -7,17 +6,17 @@ import {
   Col,
   Row,
   Container,
-  Badge,
   DropdownButton,
   ButtonGroup,
   Dropdown,
 } from "react-bootstrap";
 import StatusBadge from "../StatusBadge";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../UserProvider";
 
 export default function AssignmentView() {
   let navigate = useNavigate();
-  const [jwt, setJwt] = useLocalState("", "jwt");
+  const user = useUser();
   const assignmentId = window.location.href.split("/assignments/")[1];
   const [assignment, setAssignment] = useState({
     branch: "",
@@ -27,6 +26,11 @@ export default function AssignmentView() {
   });
   const [assignmentEnums, setAssignmentEnums] = useState([]);
   const [assignmentStatuses, setAssignmentStatuses] = useState([]);
+  const [comment, setComment] = useState({
+    text: "",
+    assignment: assignmentId,
+    user: user.jwt,
+  });
   const prevAssignmentValue = useRef(assignment);
 
   useEffect(() => {
@@ -40,7 +44,7 @@ export default function AssignmentView() {
   }, [assignment]);
 
   useEffect(() => {
-    ajax(`/api/assignments/${assignmentId}`, "GET", jwt).then(
+    ajax(`/api/assignments/${assignmentId}`, "GET", user.jwt).then(
       (assignmentsResponse) => {
         let assignmentsData = assignmentsResponse.assignment;
         if (assignmentsData.branch === null) assignmentsData.branch = "";
@@ -50,7 +54,7 @@ export default function AssignmentView() {
         setAssignmentStatuses(assignmentsResponse.statusEnums);
       }
     );
-  }, [assignmentId, jwt]);
+  }, [assignmentId, user.jwt]);
 
   function updateAssignment(property, value) {
     const newAssignment = { ...assignment };
@@ -68,12 +72,26 @@ export default function AssignmentView() {
   }
 
   function persist() {
-    ajax(`/api/assignments/${assignmentId}`, "PUT", jwt, assignment).then(
+    ajax(`/api/assignments/${assignmentId}`, "PUT", user.jwt, assignment).then(
       (assignmentsData) => {
         setAssignment(assignmentsData);
       }
     );
   }
+
+  function submitComment() {
+    ajax(`/api/comments`, "POST", user.jwt, comment).then((data) => {
+      console.log(data);
+    });
+  }
+
+  function updateComment(value) {
+    const commentCopy = { ...comment };
+    commentCopy.text = value;
+    setComment(commentCopy);
+  }
+
+  useEffect(()=>{console.log(comment);},[comment]);
 
   return (
     <Container className="mt-5">
@@ -206,6 +224,20 @@ export default function AssignmentView() {
               </Button>
             </div>
           )}
+
+          <div className="mt-5">
+            <textarea
+              style={{ width: "100%", borderRadius: "0.25em" }}
+              onChange={(e) => updateComment(e.target.value)}
+            ></textarea>
+          </div>
+          <Button
+            onClick={() => {
+              submitComment();
+            }}
+          >
+            Post Comment
+          </Button>
         </>
       ) : (
         <></>
