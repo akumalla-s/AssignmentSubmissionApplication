@@ -14,10 +14,11 @@ import {
 } from "react-bootstrap";
 import StatusBadge from "../StatusBadge";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../UserProvider";
 
 export default function CodeReviewerAssignmentView() {
   let navigate = useNavigate();
-  const [jwt, setJwt] = useLocalState("", "jwt");
+  const user = useUser();
   const assignmentId = window.location.href.split("/assignments/")[1];
   const [assignment, setAssignment] = useState({
     branch: "",
@@ -40,7 +41,7 @@ export default function CodeReviewerAssignmentView() {
   }, [assignment]);
 
   useEffect(() => {
-    ajax(`/api/assignments/${assignmentId}`, "GET", jwt).then(
+    ajax(`/api/assignments/${assignmentId}`, "GET", user.jwt).then(
       (assignmentsResponse) => {
         let assignmentsData = assignmentsResponse.assignment;
         if (assignmentsData.branch === null) assignmentsData.branch = "";
@@ -50,7 +51,7 @@ export default function CodeReviewerAssignmentView() {
         setAssignmentStatuses(assignmentsResponse.statusEnums);
       }
     );
-  }, [assignmentId, jwt]);
+  }, [assignmentId, user.jwt]);
 
   function updateAssignment(property, value) {
     const newAssignment = { ...assignment };
@@ -67,7 +68,7 @@ export default function CodeReviewerAssignmentView() {
   }
 
   function persist() {
-    ajax(`/api/assignments/${assignmentId}`, "PUT", jwt, assignment).then(
+    ajax(`/api/assignments/${assignmentId}`, "PUT", user.jwt, assignment).then(
       (assignmentsData) => {
         setAssignment(assignmentsData);
       }
