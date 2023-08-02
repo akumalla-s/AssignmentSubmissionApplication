@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocalState } from "../util/useLocalStorage";
 import ajax from "../Services/fetchService";
 import {
   Form,
@@ -7,19 +6,15 @@ import {
   Col,
   Row,
   Container,
-  Badge,
-  DropdownButton,
-  ButtonGroup,
-  Dropdown,
 } from "react-bootstrap";
 import StatusBadge from "../StatusBadge";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../UserProvider";
 
 export default function CodeReviewerAssignmentView() {
   let navigate = useNavigate();
   const user = useUser();
-  const assignmentId = window.location.href.split("/assignments/")[1];
+  const {assignmentId} = useParams();
   const [assignment, setAssignment] = useState({
     branch: "",
     githubUrl: "",

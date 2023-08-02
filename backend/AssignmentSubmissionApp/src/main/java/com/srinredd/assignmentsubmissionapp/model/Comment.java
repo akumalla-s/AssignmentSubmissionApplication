@@ -1,5 +1,7 @@
 package com.srinredd.assignmentsubmissionapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -9,6 +11,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @JsonIgnore
     @ManyToOne
     private Assignment assignment;
     @ManyToOne

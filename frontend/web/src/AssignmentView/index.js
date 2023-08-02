@@ -11,13 +11,13 @@ import {
   Dropdown,
 } from "react-bootstrap";
 import StatusBadge from "../StatusBadge";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../UserProvider";
 
 export default function AssignmentView() {
   let navigate = useNavigate();
   const user = useUser();
-  const assignmentId = window.location.href.split("/assignments/")[1];
+  const {assignmentId} = useParams();
   const [assignment, setAssignment] = useState({
     branch: "",
     githubUrl: "",
@@ -28,7 +28,7 @@ export default function AssignmentView() {
   const [assignmentStatuses, setAssignmentStatuses] = useState([]);
   const [comment, setComment] = useState({
     text: "",
-    assignment: assignmentId,
+    assignmentId,
     user: user.jwt,
   });
   const prevAssignmentValue = useRef(assignment);
@@ -80,8 +80,8 @@ export default function AssignmentView() {
   }
 
   function submitComment() {
-    ajax(`/api/comments`, "POST", user.jwt, comment).then((data) => {
-      console.log(data);
+    ajax(`/api/comments`, "POST", user.jwt, comment).then((comment) => {
+      console.log(comment);
     });
   }
 
@@ -90,8 +90,6 @@ export default function AssignmentView() {
     commentCopy.text = value;
     setComment(commentCopy);
   }
-
-  useEffect(()=>{console.log(comment);},[comment]);
 
   return (
     <Container className="mt-5">
