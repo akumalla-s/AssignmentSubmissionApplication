@@ -17,7 +17,7 @@ import { useUser } from "../UserProvider";
 export default function AssignmentView() {
   let navigate = useNavigate();
   const user = useUser();
-  const {assignmentId} = useParams();
+  const { assignmentId } = useParams();
   const [assignment, setAssignment] = useState({
     branch: "",
     githubUrl: "",
@@ -32,6 +32,7 @@ export default function AssignmentView() {
     user: user.jwt,
   });
   const prevAssignmentValue = useRef(assignment);
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     if (
@@ -80,8 +81,10 @@ export default function AssignmentView() {
   }
 
   function submitComment() {
-    ajax(`/api/comments`, "POST", user.jwt, comment).then((comment) => {
-      console.log(comment);
+    ajax(`/api/comments`, "POST", user.jwt, comment).then((commentData) => {
+      const commentsCopy = [...comments];
+      commentsCopy.push(commentData);
+      setComments(commentsCopy);
     });
   }
 
@@ -90,6 +93,17 @@ export default function AssignmentView() {
     commentCopy.text = value;
     setComment(commentCopy);
   }
+
+  useEffect(() => {
+    ajax(
+      `/api/comments?assignmentId=${assignmentId}`,
+      "GET",
+      user.jwt,
+      null
+    ).then((commentsData) => {
+      setComments(commentsData);
+    });
+  }, []);
 
   return (
     <Container className="mt-5">
@@ -228,14 +242,18 @@ export default function AssignmentView() {
               style={{ width: "100%", borderRadius: "0.25em" }}
               onChange={(e) => updateComment(e.target.value)}
             ></textarea>
+            <Button onClick={() => submitComment()}>Post Comment</Button>
           </div>
-          <Button
-            onClick={() => {
-              submitComment();
-            }}
-          >
-            Post Comment
-          </Button>
+          <div className="mt-5">
+            {comments.map((comment) => (
+              <div>
+                <span style={{ fontWeight: "bold" }}>
+                  {`[${comment.createdDate}] ${comment.createdBy.name}: `}
+                </span>
+                {comment.text}
+              </div>
+            ))}
+          </div>
         </>
       ) : (
         <></>
