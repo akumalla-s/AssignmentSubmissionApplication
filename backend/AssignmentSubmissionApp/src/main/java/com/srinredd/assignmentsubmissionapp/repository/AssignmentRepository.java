@@ -3,6 +3,7 @@ package com.srinredd.assignmentsubmissionapp.repository;
 import java.util.Set;
 
 import com.srinredd.assignmentsubmissionapp.enums.AssignmentStatusEnum;
+import com.srinredd.assignmentsubmissionapp.model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,4 +21,5 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long>{
             + "or a.codeReviewer = :codeReviewer"
     )
     Set<Assignment> findByCodeReviewer(User codeReviewer);
+
 }
