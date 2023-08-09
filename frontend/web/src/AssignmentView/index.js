@@ -13,52 +13,23 @@ import {
 import StatusBadge from "../StatusBadge";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../UserProvider";
-import Comment from "../Comment";
+import CommentContainer from "../CommentContainer";
 
 export default function AssignmentView() {
   let navigate = useNavigate();
   const user = useUser();
   const { assignmentId } = useParams();
+
   const [assignment, setAssignment] = useState({
     branch: "",
     githubUrl: "",
     number: null,
     status: null,
   });
-  const emptyComment = {
-    id: null,
-    text: "",
-    assignmentId: assignmentId != null ? parseInt(assignmentId) : null,
-    user: user.jwt,
-  }
   const [assignmentEnums, setAssignmentEnums] = useState([]);
   const [assignmentStatuses, setAssignmentStatuses] = useState([]);
-  const [comment, setComment] = useState(emptyComment);
+
   const prevAssignmentValue = useRef(assignment);
-  const [comments, setComments] = useState([]);
-
-  useEffect(() => {
-    if (
-      assignment &&
-      prevAssignmentValue.current.status !== assignment.status
-    ) {
-      persist();
-    }
-    prevAssignmentValue.current = assignment;
-  }, [assignment]);
-
-  useEffect(() => {
-    ajax(`/api/assignments/${assignmentId}`, "GET", user.jwt).then(
-      (assignmentsResponse) => {
-        let assignmentsData = assignmentsResponse.assignment;
-        if (assignmentsData.branch === null) assignmentsData.branch = "";
-        if (assignmentsData.githubUrl === null) assignmentsData.githubUrl = "";
-        setAssignment(assignmentsData);
-        setAssignmentEnums(assignmentsResponse.assignmentEnums);
-        setAssignmentStatuses(assignmentsResponse.statusEnums);
-      }
-    );
-  }, [assignmentId, user.jwt]);
 
   function updateAssignment(property, value) {
     const newAssignment = { ...assignment };
@@ -83,58 +54,25 @@ export default function AssignmentView() {
     );
   }
 
-  function submitComment() {
-    if (comment.id) {
-      ajax(`/api/comments/${comment.id}`, "PUT", user.jwt, comment).then((d) => {
-        const commentsCopy = [...comments];
-        const i = commentsCopy.findIndex((comment) => comment.id === d.id);
-        commentsCopy[i] = d;
-        setComments(commentsCopy);
-        setComment(emptyComment);
-      });
-    } else {
-      ajax(`/api/comments`, "POST", user.jwt, comment).then((d) => {
-        const commentsCopy = [...comments];
-        commentsCopy.push(d);
-        setComments(commentsCopy);
-        setComment(emptyComment);
-      });
+  useEffect(() => {
+    if (prevAssignmentValue.current.status !== assignment.status) {
+      persist();
     }
-  }
-
-  function updateComment(value) {
-    const commentCopy = { ...comment };
-    commentCopy.text = value;
-    setComment(commentCopy);
-  }
+    prevAssignmentValue.current = assignment;
+  }, [assignment]);
 
   useEffect(() => {
-    ajax(
-      `/api/comments?assignmentId=${assignmentId}`,
-      "GET",
-      user.jwt,
-      null
-    ).then((commentsData) => {
-      setComments(commentsData);
-    });
+    ajax(`/api/assignments/${assignmentId}`, "GET", user.jwt).then(
+      (assignmentsResponse) => {
+        let assignmentsData = assignmentsResponse.assignment;
+        if (assignmentsData.branch === null) assignmentsData.branch = "";
+        if (assignmentsData.githubUrl === null) assignmentsData.githubUrl = "";
+        setAssignment(assignmentsData);
+        setAssignmentEnums(assignmentsResponse.assignmentEnums);
+        setAssignmentStatuses(assignmentsResponse.statusEnums);
+      }
+    );
   }, []);
-
-  function handleDeleteComment(commentId) {
-    //TODO: send DELETE request to server
-    console.log("DELETE comment", commentId);
-  }
-
-  function handleEditComment(commentId) {
-    const i = comments.findIndex((comment) => comment.id === commentId);
-    console.log("EDIT comment", comments[i]);
-    const commentCopy = {
-      id: comments[i].id,
-      text: comments[i].text,
-      assignmentId: assignmentId != null ? parseInt(assignmentId) : null,
-      user: user.jwt,
-    };
-    setComment(commentCopy);
-  }
 
   return (
     <Container className="mt-5">
@@ -267,27 +205,7 @@ export default function AssignmentView() {
               </Button>
             </div>
           )}
-
-          <div className="mt-5">
-            <textarea
-              style={{ width: "100%", borderRadius: "0.25em" }}
-              onChange={(e) => updateComment(e.target.value)}
-              value={comment.text}
-            ></textarea>
-            <Button onClick={() => submitComment()}>Post Comment</Button>
-          </div>
-          <div className="mt-5">
-            {comments.map((comment) => (
-              <Comment
-                createdDate={comment.createdDate}
-                createdBy={comment.createdBy}
-                text={comment.text}
-                emitDeleteComment={handleDeleteComment}
-                emitEditComment={handleEditComment}
-                id={comment.id}
-              />
-            ))}
-          </div>
+          <CommentContainer assignmentId={assignmentId} />
         </>
       ) : (
         <></>
