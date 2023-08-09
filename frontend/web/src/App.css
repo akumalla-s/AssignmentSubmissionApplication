@@ -12,3 +12,12 @@
   background-color: white;
   white-space: nowrap;
 }
+
+.comment-bubble{
+  background: #eeeeee;
+  border-radius: 1em;
+  padding: 1em;
+  margin: 1em 0em;
+  
+}
+
