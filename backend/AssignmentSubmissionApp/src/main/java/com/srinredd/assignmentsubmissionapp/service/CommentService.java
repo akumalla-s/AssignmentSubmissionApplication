@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -27,10 +28,17 @@ public class CommentService {
         Comment comment = new Comment();
         Assignment assignment = assignmentRepository.getReferenceById(commentDto.getAssignmentId());
 
+        comment.setId(commentDto.getId());
         comment.setText(commentDto.getText());
         comment.setAssignment(assignment);
         comment.setCreatedBy(user);
-        comment.setCreatedDate(LocalDateTime.now());
+        if(comment.getId() == null){
+            comment.setCreatedDate(LocalDateTime.now());
+        }else{
+            Comment comment1 = commentRepository.findById(comment.getId()).orElse(null);
+            assert comment1 != null;
+            comment.setCreatedDate(comment1.getCreatedDate());
+        }
 
         return commentRepository.save(comment);
     }

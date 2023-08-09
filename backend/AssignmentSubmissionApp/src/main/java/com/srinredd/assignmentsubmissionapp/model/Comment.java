@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @JsonIgnore
     @ManyToOne
     private Assignment assignment;
@@ -21,21 +21,20 @@ public class Comment {
     @Column(columnDefinition = "TEXT")
     private String text;
 
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public Assignment getAssignment() {
+        return assignment;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
+    public void setAssignment(Assignment assignment) {
+        this.assignment = assignment;
     }
 
     public User getCreatedBy() {
@@ -46,19 +45,19 @@ public class Comment {
         this.createdBy = createdBy;
     }
 
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public String getText() {
         return text;
     }
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public Assignment getAssignment() {
-        return assignment;
-    }
-
-    public void setAssignment(Assignment assignment) {
-        this.assignment = assignment;
     }
 }
