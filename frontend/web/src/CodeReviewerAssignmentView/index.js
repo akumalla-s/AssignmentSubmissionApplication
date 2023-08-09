@@ -1,20 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import ajax from "../Services/fetchService";
-import {
-  Form,
-  Button,
-  Col,
-  Row,
-  Container,
-} from "react-bootstrap";
+import { Form, Button, Col, Row, Container } from "react-bootstrap";
 import StatusBadge from "../StatusBadge";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../UserProvider";
+import CommentContainer from "../CommentContainer";
 
 export default function CodeReviewerAssignmentView() {
   let navigate = useNavigate();
   const user = useUser();
-  const {assignmentId} = useParams();
+  const { assignmentId } = useParams();
   const [assignment, setAssignment] = useState({
     branch: "",
     githubUrl: "",
@@ -77,7 +72,7 @@ export default function CodeReviewerAssignmentView() {
           {assignment.number ? <h1>Assignment {assignment.number}</h1> : <></>}
         </Col>
         <Col>
-        <StatusBadge text={assignment.status} />
+          <StatusBadge text={assignment.status} />
         </Col>
       </Row>
 
@@ -175,6 +170,7 @@ export default function CodeReviewerAssignmentView() {
               Back
             </Button>
           </div>
+          <CommentContainer assignmentId={assignmentId} />
         </>
       ) : (
         <></>

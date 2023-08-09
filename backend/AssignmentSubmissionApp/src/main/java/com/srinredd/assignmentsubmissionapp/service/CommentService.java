@@ -35,9 +35,7 @@ public class CommentService {
         if(comment.getId() == null){
             comment.setCreatedDate(LocalDateTime.now());
         }else{
-            Comment comment1 = commentRepository.findById(comment.getId()).orElse(null);
-            assert comment1 != null;
-            comment.setCreatedDate(comment1.getCreatedDate());
+            comment.setCreatedDate(commentDto.getCreatedDate());
         }
 
         return commentRepository.save(comment);
@@ -46,5 +44,9 @@ public class CommentService {
     public Set<Comment> getCommentsByAssignmentId(Long assignmentId) {
         Set<Comment> comments = commentRepository.findByAssignmentId(assignmentId);
         return comments;
+    }
+
+    public void delete(Long commentId){
+        commentRepository.deleteById(commentId);
     }
 }

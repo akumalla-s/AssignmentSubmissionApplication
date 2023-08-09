@@ -1,10 +1,21 @@
 package com.srinredd.assignmentsubmissionapp.dto;
 
+import java.time.LocalDateTime;
+
 public class CommentDto {
     private  Long id;
     private Long assignmentId;
     private String text;
     private String User;
+    private LocalDateTime createdDate;
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
 
     public Long getId() {
         return id;

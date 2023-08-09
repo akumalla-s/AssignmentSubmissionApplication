@@ -8,10 +8,12 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/controller/CommentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/dto/CommentDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/dto/CommentDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/model/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/model/Comment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/AssignmentSubmissionApp/src/main/java/com/srinredd/assignmentsubmissionapp/service/CommentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/web/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/web/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/web/src/AssignmentView/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/src/AssignmentView/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/web/src/CodeReviewerAssignmentView/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/src/CodeReviewerAssignmentView/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/web/src/Comment/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/src/Comment/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +99,8 @@
       <workItem from="1690306137692" duration="4695000" />
       <workItem from="1690392165505" duration="2937000" />
       <workItem from="1690472729571" duration="257000" />
-      <workItem from="1690912019568" duration="11650000" />
+      <workItem from="1690912019568" duration="13396000" />
+      <workItem from="1691616986576" duration="1274000" />
     </task>
     <servers />
   </component>
