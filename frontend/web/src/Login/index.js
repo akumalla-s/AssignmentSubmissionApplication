@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Col, Container, Row, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../UserProvider";
@@ -8,12 +8,10 @@ export default function Login() {
   let navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  useEffect(() => {
-    if (user.jwt) navigate("/dashboard");
-  },[user.jwt, navigate]);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   function sendLoginRequest() {
+    setErrorMsg("");
     const reqBody = {
       username: username,
       password: password,
@@ -29,15 +27,18 @@ export default function Login() {
       .then((response) => {
         if (response.status === 200) {
           return Promise.all([response.json(), response.headers]);
+        } else if (response.status === 401 || response.status === 403) {
+          setErrorMsg("Invalid username or password");
         } else {
-          return Promise.reject("Invalid login attempt");
+          setErrorMsg("Something went wrong, try again later");
         }
       })
       .then(([body, headers]) => {
         user.setJwt(headers.get("authorization"));
+        navigate("/dashboard");
       })
-      .catch((message) => {
-        alert(message);
+      .catch((error) => {
+        setErrorMsg("Something went wrong, try again later");
       });
   }
   return (
@@ -72,6 +73,18 @@ export default function Login() {
             </Form.Group>
           </Col>
         </Row>
+
+        {errorMsg ? (
+          <Row className="justify-content-center mb-4">
+            <Col md="8" lg="6">
+              <div className="" style={{ color: "red", fontWeight: "bold" }}>
+                {errorMsg}
+              </div>
+            </Col>
+          </Row>
+        ) : (
+          <></>
+        )}
 
         <Row className="justify-content-center">
           <Col
