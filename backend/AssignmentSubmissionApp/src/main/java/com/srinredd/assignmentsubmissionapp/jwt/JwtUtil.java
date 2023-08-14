@@ -22,7 +22,8 @@ public class JwtUtil implements Serializable {
 	private static final long serialVersionUID = -1632717224675515594L;
 
 	// Current validity of the token is set to 5 hours: days * hours * minutes * seconds
-	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+//	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+	public static final long JWT_TOKEN_VALIDITY = 10;
 
 	//This value is set in application.properties file
 	@Value("${jwt.secret}")

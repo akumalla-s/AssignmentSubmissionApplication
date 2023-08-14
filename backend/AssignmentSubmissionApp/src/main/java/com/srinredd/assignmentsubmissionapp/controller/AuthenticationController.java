@@ -70,6 +70,7 @@ public class AuthenticationController {
 			Boolean isValidToken = jwtUtil.validateToken(token, user);
 			return ResponseEntity.ok(isValidToken);
 		} catch (ExpiredJwtException e) {
+			//e.printStackTrace();
 			return ResponseEntity.ok(false);
 		}
 	}
