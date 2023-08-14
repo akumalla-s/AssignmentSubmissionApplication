@@ -39,7 +39,7 @@ export default function AssignmentView() {
 
   function save(status) {
     // This implies that the student is submitting the assignment for the first time
-    if (status && assignment.status != status) {
+    if (status && assignment.status !== status) {
       updateAssignment("status", status);
     } else {
       persist();
